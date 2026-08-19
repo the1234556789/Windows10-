@@ -6,10 +6,12 @@ Windows 10 网页版是一个使用标准的网页技术，如HTML、CSS、Javas
 此项目绝不附属于Microsoft，且不应与Microsoft的产品相混淆，这也不是Windows 365 Cloud PC
 本项目中Microsoft、Windows和其它示范产品是Microsoft公司的商标。
 ## 其它
-如果你对该项目感兴趣可以到<a target="_blank" href="https://github.com/siquan001/Win10online">Github</a>提issue，或联系我的邮箱：chensiquan2022@163.com
+如果你对该项目感兴趣可以到<a target="_blank" href="[[https://github.com/siquan001/Win10online](https://github.com/the1234556789/Windows10-)](https://github.com/the1234556789/Windows10-)">Github</a>提issue，或联系我的邮箱：3876175047@qq.com
 ## 当前版本:1.2.5
 修复了所有bug
-##
+以及修复计算器
+还有Edge应用部分bug
+### 0.7.6
 添加右键菜单
 ### 0.7.5
 添加通知功能，并对窗口进行优化。
