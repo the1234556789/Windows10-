@@ -1,0 +1,161 @@
+/* ============================================================
+ * KuGou For Web - index.css（补全版）
+ * 与 index.js 配合：歌词行高 line-height:30 + margin:5*2 = 40px
+ * ============================================================ */
+
+* { box-sizing: border-box; }
+
+body {
+  background: #1e1e1e;
+  color: #fff;
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  user-select: none;
+}
+
+/* ---------- 顶部搜索栏 ---------- */
+.header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: #181818;
+  border-bottom: 1px solid #2a2a2a;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #2a2a2a;
+  border-radius: 20px;
+  padding: 5px 14px;
+  width: 360px;
+  gap: 8px;
+}
+.search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 13px;
+}
+.search-box i { color: #999; font-size: 14px; }
+
+/* ---------- 搜索结果列表 ---------- */
+.searchlist {
+  position: absolute;
+  top: 44px;
+  left: 16px;
+  width: 360px;
+  max-height: 420px;
+  overflow: auto;
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 8px;
+  z-index: 100;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+}
+.searchlist-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #333;
+  font-size: 13px;
+  color: #ccc;
+}
+.searchlist-header i { cursor: pointer; }
+.searchlist ul { list-style: none; padding: 4px 0; margin: 0; }
+.searchlist li {
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #ddd;
+}
+.searchlist li:hover { background: #333; }
+.searchlist li .dot {
+  width: 20px;
+  color: #777;
+  font-size: 12px;
+}
+.searchlist li .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- 主内容 ---------- */
+.main {
+  display: flex;
+  padding: 20px 24px;
+  gap: 24px;
+  height: calc(100% - 44px);
+}
+
+/* 左侧 */
+.left-panel { width: 360px; }
+.controls { display: flex; align-items: flex-start; }
+.gc .title { font-size: 16px; font-weight: bold; color: #fff; }
+.gc .song { font-size: 13px; color: #ccc; margin-top: 4px; }
+.gc .song .name { font-weight: 600; }
+.gc .song .album { color: #888; margin-left: 6px; }
+.gc .singer { font-size: 12px; color: #999; margin-top: 6px; }
+
+.playbar { display: flex; align-items: center; }
+.playbar i { color: #ddd; }
+.playbar .playbtn { color: #1ed760; }
+
+/* 进度条 */
+.progress { background: #444; }
+.progress:hover { height: 6px; }
+
+/* 设置 */
+.settings select, .settings input[type=range] {
+  background: #2a2a2a;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+/* ---------- 右侧 ---------- */
+.right-panel { flex: 1; }
+
+/* 歌词 */
+.gcframe {
+  background: #181818;
+  border-radius: 10px;
+  padding: 140px 0;   /* 上下留白，让当前行居中 */
+  overflow: hidden;
+}
+.gcframe ul { transition: transform .3s ease; }
+.gcframe li {
+  line-height: 30px;
+  margin: 5px 0;       /* 30 + 5*2 = 40px/行，与 JS LINE_HEIGHT 对齐 */
+  font-size: 14px;
+  color: #666;
+  transition: color .25s, font-size .25s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
+}
+.gcframe li.act {
+  color: #1ed760;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 播放列表 */
+.playlist { background: #181818; border-radius: 10px; padding: 12px; height: 100%; }
+.playlist .list { overflow: auto; }
+.playlist ul { list-style: none; padding: 0; margin: 0; }
+.playlist li {
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.playlist li:hover { background: #2a2a2a; }
+.playlist li.act { background: #2a4a32; color: #1ed760; }

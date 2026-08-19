@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>文件资源管理器</title>
+<link rel="stylesheet" href="explorer.css">
+<style>
+  /* 内联 SVG 图标通用尺寸 */
+  .ui-icon svg, .quick-fw .ui-icon svg, .right-con ul li .ui-icon svg { width:100%; height:100%; display:block; }
+  .address .ui-icon svg { width:20px; height:20px; margin:7px; }
+  /* 菜单激活态 */
+  .top ul.left li.act { background-color: rgb(35,99,216); border-color:#0000; color:#fff; }
+  .top ul.left li.act:hover { background-color: rgb(35,99,216); }
+</style>
+</head>
+<body style="margin:0;overflow:hidden;height:100vh;font-family:'Segoe UI','Microsoft YaHei',sans-serif;">
+
+<!-- 顶部菜单栏 -->
+<div class="top">
+  <ul class="left">
+    <li data-menu="file">文件(F)</li>
+    <li data-menu="computer">计算机</li>
+    <li data-menu="view">查看(V)</li>
+  </ul>
+  <ul class="right">
+    <li class="ui-icon" title="帮助"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></li>
+  </ul>
+</div>
+
+<!-- 地址栏 -->
+<div class="address">
+  <div class="ui-icon t" data-act="back" title="返回"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+  <div class="ui-icon t" data-act="forward" title="前进"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+  <div class="ui-icon t" data-act="up" title="向上"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></div>
+  <div class="ui-icon t reload" data-act="refresh" title="刷新"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+  <div class="input">
+    <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg></div>
+    <span class="addr-text" style="line-height:28px;font-size:12px;color:#333;"></span>
+  </div>
+  <div class="search">
+    <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    <input type="text" placeholder="搜索此电脑" class="search-input">
+  </div>
+</div>
+
+<!-- 主体 -->
+<div class="main">
+  <!-- 左侧栏 -->
+  <div class="left-bar">
+    <div class="quick-fw">
+      <div class="t">
+        <div class="ui-icon">
+          <!-- 此电脑 -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><rect x="2" y="4" width="20" height="14" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="6" y1="18" x2="18" y2="18"/></svg>
+        </div>
+        <div class="title" data-key="thispc">此电脑</div>
+        <div class="bi">▾</div>
+      </div>
+      <ul>
+        <li data-key="desktop">
+          <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><rect x="2" y="4" width="20" height="13" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div class="title">桌面</div>
+        </li>
+        <li data-key="docs">
+          <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="title">文档</div>
+        </li>
+        <li data-key="downloads">
+          <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="title">下载</div>
+        </li>
+        <li data-key="pictures">
+          <div class="ui-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="title">图片</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 右侧内容 -->
+  <div class="right-con">
+    <ul id="file-list"><!-- JS 动态渲染 --></ul>
+  </div>
+</div>
+
+<script src="../../../jquery.js"></script>
+<script src="../../../appui.js"></script>
+<script src="explorer.js"></script>
+</body>
+</html>

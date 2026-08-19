@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>记事本</title>
+    <link rel="stylesheet" href="notepad.css">
+    <style>
+        /* 菜单栏激活态 */
+        .openlist ul li.act {
+            background: #cde6ff;
+        }
+        /* 下拉菜单 */
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 24px;
+            left: 0;
+            background: #f2f2f2;
+            border: 1px solid #aaa;
+            box-shadow: 2px 2px 4px rgba(0,0,0,.15);
+            min-width: 160px;
+            z-index: 999;
+            padding: 2px 0;
+        }
+        .menu-dropdown.show {
+            display: block;
+        }
+        .menu-dropdown .item {
+            padding: 6px 28px 6px 32px;
+            font-size: 13px;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+        .menu-dropdown .item:hover {
+            background: #cde6ff;
+        }
+        .menu-dropdown .item.disabled {
+            color: #999;
+            cursor: default;
+        }
+        .menu-dropdown .item.disabled:hover {
+            background: transparent;
+        }
+        .menu-dropdown .sep {
+            height: 1px;
+            background: #ddd;
+            margin: 3px 0;
+        }
+        .menu-dropdown .shortcut {
+            position: absolute;
+            right: 12px;
+            color: #666;
+            font-size: 12px;
+        }
+        /* 让 .openlist 成为定位锚点 */
+        .openlist {
+            position: relative;
+        }
+        /* 关于弹窗 */
+        .about-mask {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.35);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .about-mask.show {
+            display: flex;
+        }
+        .about-box {
+            background: #f0f0f0;
+            border: 1px solid #666;
+            border-radius: 6px;
+            padding: 22px 30px 16px;
+            text-align: center;
+            min-width: 280px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.25);
+        }
+        .about-box h3 { margin: 0 0 8px; font-size: 15px; }
+        .about-box p { margin: 4px 0; font-size: 13px; color: #333; }
+        .about-box button {
+            margin-top: 14px;
+            padding: 5px 22px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="margin:0;overflow:hidden;">
+    <div class="openlist">
+        <ul style="margin:0;padding:0;list-style:none;display:flex;">
+            <li style="padding:3px 8px;cursor:pointer;position:relative;" data-menu="file">文件(F)</li>
+            <li style="padding:3px 8px;cursor:pointer;position:relative;" data-menu="edit">编辑(E)</li>
+            <li style="padding:3px 8px;cursor:pointer;position:relative;" data-menu="format">格式(O)</li>
+            <li style="padding:3px 8px;cursor:pointer;position:relative;" data-menu="view">查看(V)</li>
+            <li style="padding:3px 8px;cursor:pointer;position:relative;" data-menu="help">帮助(H)</li>
+        </ul>
+
+        <!-- 文件下拉菜单 -->
+        <div class="menu-dropdown" id="menu-file">
+            <div class="item" data-action="new">新建 <span class="shortcut">Ctrl+N</span></div>
+            <div class="sep"></div>
+            <div class="item disabled">打开… <span class="shortcut">Ctrl+O</span></div>
+            <div class="sep"></div>
+            <div class="item" data-action="save">保存 <span class="shortcut">Ctrl+S</span></div>
+            <div class="sep"></div>
+            <div class="item disabled">页面设置…</div>
+            <div class="item disabled">打印… <span class="shortcut">Ctrl+P</span></div>
+            <div class="sep"></div>
+            <div class="item" data-action="exit">退出</div>
+        </div>
+
+        <!-- 编辑下拉菜单 -->
+        <div class="menu-dropdown" id="menu-edit">
+            <div class="item disabled">撤销 <span class="shortcut">Ctrl+Z</span></div>
+            <div class="sep"></div>
+            <div class="item disabled">剪切 <span class="shortcut">Ctrl+X</span></div>
+            <div class="item disabled">复制 <span class="shortcut">Ctrl+C</span></div>
+            <div class="item disabled">粘贴 <span class="shortcut">Ctrl+V</span></div>
+            <div class="sep"></div>
+            <div class="item" data-action="clear">删除全部</div>
+            <div class="sep"></div>
+            <div class="item" data-action="time">插入时间/日期 <span class="shortcut">F5</span></div>
+        </div>
+
+        <!-- 格式下拉菜单 -->
+        <div class="menu-dropdown" id="menu-format">
+            <div class="item disabled">自动换行</div>
+            <div class="item disabled">字体…</div>
+        </div>
+
+        <!-- 查看下拉菜单 -->
+        <div class="menu-dropdown" id="menu-view">
+            <div class="item disabled">缩放</div>
+            <div class="item disabled">状态栏</div>
+        </div>
+
+        <!-- 帮助下拉菜单 -->
+        <div class="menu-dropdown" id="menu-help">
+            <div class="item" data-action="about">关于记事本</div>
+        </div>
+    </div>
+
+    <textarea id="editor" style="width:100%;height:calc(100% - 52px);border:none;outline:none;resize:none;padding:4px 6px;font-family:Consolas,'Courier New',monospace;font-size:14px;box-sizing:border-box;background:#fff;color:#000;"></textarea>
+
+    <div class="statusbar" style="height:24px;line-height:24px;background:#f2f2f2;border-top:1px solid #ccc;padding:0 8px;font-size:12px;color:#333;user-select:none;">
+        <span id="pos">第 1 行，第 1 列</span>
+    </div>
+
+    <!-- 关于弹窗 -->
+    <div class="about-mask" id="aboutMask">
+        <div class="about-box">
+            <h3>关于记事本</h3>
+            <p>Win10online 记事本 · 修改版</p>
+            <p style="color:#666;">基于 siquan001/Win10online</p>
+            <button onclick="document.getElementById('aboutMask').classList.remove('show')">确定</button>
+        </div>
+    </div>
+
+    <script src="../../../jquery.js"></script>
+    <script src="../../../appui.js"></script>
+    <script>
+    (function () {
+        var editor = document.getElementById('editor');
+        var pos = document.getElementById('pos');
+        var menuItems = document.querySelectorAll('.openlist > ul > li');
+
+        // ── 行列更新 ──
+        function updatePos() {
+            var text = editor.value.slice(0, editor.selectionStart);
+            var lines = text.split('\n');
+            var row = lines.length;
+            var col = lines[lines.length - 1].length + 1;
+            pos.textContent = '第 ' + row + ' 行，第 ' + col + ' 列';
+        }
+        editor.addEventListener('input', updatePos);
+        editor.addEventListener('click', updatePos);
+        editor.addEventListener('keyup', updatePos);
+
+        // ── 菜单栏点击：打开/切换下拉 ──
+        var currentOpen = null;
+
+        menuItems.forEach(function (li) {
+            li.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var key = li.getAttribute('data-menu');
+                var dropdown = document.getElementById('menu-' + key);
+
+                // 关闭已打开的
+                if (currentOpen && currentOpen !== dropdown) {
+                    currentOpen.classList.remove('show');
+                }
+
+                if (dropdown) {
+                    dropdown.classList.toggle('show');
+                    currentOpen = dropdown.classList.contains('show') ? dropdown : null;
+                }
+
+                // 高亮
+                menuItems.forEach(function (x) { x.classList.remove('act'); });
+                if (currentOpen) li.classList.add('act');
+            });
+        });
+
+        // ── 点击页面其他位置关闭下拉 ──
+        document.addEventListener('click', function () {
+            if (currentOpen) {
+                currentOpen.classList.remove('show');
+                currentOpen = null;
+                menuItems.forEach(function (x) { x.classList.remove('act'); });
+            }
+        });
+
+        // ── 下拉菜单项点击 ──
+        document.querySelectorAll('.menu-dropdown .item:not(.disabled)').forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var action = item.getAttribute('data-action');
+                handleAction(action);
+                // 关闭菜单
+                if (currentOpen) {
+                    currentOpen.classList.remove('show');
+                    currentOpen = null;
+                }
+                menuItems.forEach(function (x) { x.classList.remove('act'); });
+            });
+        });
+
+        // ── 动作分发 ──
+        function handleAction(action) {
+            switch (action) {
+                case 'new':
+                    if (editor.value && !confirm('是否放弃当前更改？')) return;
+                    editor.value = '';
+                    updatePos();
+                    break;
+                case 'save':
+                    var blob = new Blob([editor.value], { type: 'text/plain;charset=utf-8' });
+                    var a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = '新建文本文档.txt';
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                    break;
+                case 'clear':
+                    if (editor.value && !confirm('确定要清空全部内容？')) return;
+                    editor.value = '';
+                    updatePos();
+                    break;
+                case 'time':
+                    var now = new Date();
+                    var str = now.getFullYear() + '/' + String(now.getMonth()+1).padStart(2,'0') + '/' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+                    var start = editor.selectionStart;
+                    var end = editor.selectionEnd;
+                    editor.value = editor.value.slice(0, start) + str + editor.value.slice(end);
+                    editor.selectionStart = editor.selectionEnd = start + str.length;
+                    updatePos();
+                    break;
+                case 'about':
+                    document.getElementById('aboutMask').classList.add('show');
+                    break;
+                case 'exit':
+                    // 通知父窗口关闭这个 iframe 窗口
+                    if (window.parent && window.parent.setFocus) {
+                        // 找到当前窗口并关闭
+                        var frames = window.parent.document.querySelectorAll('iframe');
+                        for (var i = 0; i < frames.length; i++) {
+                            if (frames[i].contentWindow === window) {
+                                var win = frames[i].closest('.window, .Popup');
+                                if (win) {
+                                    var closeBtn = win.querySelector('.close, .titlebar-close, [class*="close"]');
+                                    if (closeBtn) closeBtn.click();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        // ── 键盘快捷键 ──
+        editor.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.key === 'n') { e.preventDefault(); handleAction('new'); }
+            if (e.ctrlKey && e.key === 's') { e.preventDefault(); handleAction('save'); }
+            if (e.key === 'F5') { e.preventDefault(); handleAction('time'); }
+        });
+
+        // 初始行列
+        updatePos();
+    })();
+    </script>
+</body>
+</html>

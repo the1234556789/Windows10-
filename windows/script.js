@@ -1,0 +1,1 @@
+document.getElementById("app").src='pages/poweron.html';
