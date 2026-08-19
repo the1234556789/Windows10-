@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>酷狗音乐</title>
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body style="margin:0;overflow:hidden;background:#1e1e1e;color:#fff;font-family:'Microsoft YaHei',sans-serif;">
+
+  <!-- 音频元素 -->
+  <audio id="audio" preload="auto"></audio>
+
+  <!-- 顶部搜索栏 -->
+  <div class="header">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="搜索歌曲、歌手">
+      <i class="bi bi-arrow-clockwise" title="刷新搜索" style="cursor:pointer;"></i>
+    </div>
+  </div>
+
+  <!-- 搜索结果列表（默认隐藏） -->
+  <div class="searchlist" style="display:none;">
+    <div class="searchlist-header">
+      <i class="bi bi-chevron-left"></i>
+      <span>搜索结果</span>
+    </div>
+    <ul></ul>
+  </div>
+
+  <!-- 主内容区 -->
+  <div class="main">
+
+    <!-- 左侧：封面 + 歌名信息 -->
+    <div class="left-panel">
+      <div class="controls">
+        <div class="left">
+          <img src="" alt="cover" style="width:120px;height:120px;border-radius:8px;object-fit:cover;">
+        </div>
+        <div class="gc" style="margin-left:16px;flex:1;">
+          <div class="title" style="font-size:16px;font-weight:bold;"></div>
+          <div class="singer" style="font-size:13px;color:#aaa;margin-top:6px;"></div>
+        </div>
+      </div>
+
+      <!-- 播放控制条 -->
+      <div class="playbar" style="margin-top:20px;">
+        <i class="bi bi-skip-start-fill" title="上一首" style="cursor:pointer;font-size:22px;"></i>
+        <i class="bi bi-play-fill playbtn" title="播放/暂停" style="cursor:pointer;font-size:28px;margin:0 14px;"></i>
+        <i class="bi bi-skip-end-fill" title="下一首" style="cursor:pointer;font-size:22px;"></i>
+      </div>
+
+      <!-- 进度条 -->
+      <div class="progress" style="--i:0%;height:4px;background:#444;border-radius:2px;margin-top:14px;position:relative;cursor:pointer;">
+        <div class="progress-inner" style="width:var(--i);height:100%;background:#1ed760;border-radius:2px;"></div>
+      </div>
+      <div class="time" style="display:flex;justify-content:space-between;font-size:12px;color:#999;margin-top:4px;">
+        <span class="z">00:00</span>
+        <span class="c">00:00</span>
+      </div>
+
+      <!-- 倍速 / 音量 -->
+      <div class="settings" style="display:flex;gap:18px;margin-top:14px;font-size:13px;color:#ccc;">
+        <label>倍速
+          <select id="bs">
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1.0x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2.0x</option>
+          </select>
+        </label>
+        <label>音量
+          <input id="sy" type="range" min="0" max="1" step="0.05" value="0.5" style="vertical-align:middle;">
+        </label>
+      </div>
+    </div>
+
+    <!-- 右侧：歌词 + 播放列表 -->
+    <div class="right-panel" style="display:flex;gap:16px;">
+
+      <!-- 歌词 -->
+      <div class="gcframe" style="--i:1;width:260px;height:360px;overflow:hidden;position:relative;">
+        <ul style="transition:transform .3s;list-style:none;padding:0;margin:0;text-align:center;"></ul>
+      </div>
+
+      <!-- 播放列表 -->
+      <div class="playlist" style="width:200px;">
+        <div style="font-size:13px;color:#aaa;margin-bottom:6px;">播放列表</div>
+        <div class="list" style="max-height:340px;overflow:auto;">
+          <ul id="playlist-ul" style="list-style:none;padding:0;margin:0;"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../jquery.js"></script>
+  <script src="../../../appui.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
