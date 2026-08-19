@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>至Windows10网页版的中转站</title>
+    <style>
+        *{
+            margin: 0;padding: 0;
+        }
+        .message{
+            width: 60%;
+            height: 300px;
+            margin: 60px auto;
+        }
+        .message h1{
+            font-size: 30px;
+            text-align: center;
+        }
+        .message p.a{
+            text-align: center;
+            line-height: 40px;
+            font-style: italic;
+            font-family: Consolas;
+            color: grey;
+        }
+        .message p.b{
+            text-indent: 2em;
+            line-height: 24px;
+        }
+        .load{
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            border-top: #0006 solid 2px;
+            border-left: #0006 solid 2px;
+        }
+        svg{
+            margin:0 auto;
+            display: block;
+        }
+        svg circle{
+            stroke-dasharray: 16;
+            stroke-dashoffset: 0;
+            animation:r 1s infinite linear;
+            transform-origin: center center;
+        }
+        @keyframes r {
+            0%{
+                transform: rotate(0deg);
+            }100%{
+                transform: rotate(360deg);
+            }
+        }
+        .message p.c{
+            text-align: center;
+            line-height: 40px;
+            font-style: italic;
+            font-family: Consolas;
+            color: grey;
+            font-size: 18px;
+            opacity: 1;
+            animation: o .8s infinite;
+        }
+        @keyframes o {
+            0%{
+                opacity: 0;
+            }50%{
+                opacity: 1;
+            }100%{
+                opacity: 0;
+            }
+        }
+        img{
+            max-width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message">
+        <h1>至Windows10网页版的中转站</h1>
+        <p class="a">Other Website => Windows10网页版</p>
+        <p class="b">在这里，我们只帮你预加载一些图片，因为Github站点访问较慢,加载完后自动跳转，如果你不想等待，请点击<a href="./windows/">链接</a></p>
+        <svg viewBox="0 0 50 50" width="100" height="100">
+            <circle cx="25" cy="25" r="10" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none" stroke-dasharray="16"></circle>
+        </svg>
+    </div>
+    <div>
+        <img src="https://s1.ax1x.com/2022/12/17/zHwsl4.jpg" alt="">
+        <img src="https://s1.ax1x.com/2022/12/17/zHwrpF.jpg" alt="">
+        <img src="./img/windows10_home.png" alt="">
+        <img src="./img/windows10_icon.png" alt="">
+        <img src="./img/icon/bin0.png" alt="">
+        <img src="./img/icon/edge.png" alt="">
+        <img src="./img/icon/settings.png" alt="">
+        <img src="./img/icon/ui/settings.png" alt="">
+        <img src="./img/icon/ui/power.png" alt="">
+        <img src="./img/icon/ui/screenshot.png" alt="">
+        <img src="./img/icon/ui/defAccount.png" alt="">
+        <img src="./img/icon/ui/saver.png" alt="">
+        <img src="./img/icon/ui/sun.png" alt="">
+        <img src="./img/icon/ui/moon.png" alt="">
+        <img src="./img/icon/ui/wifi.png" alt="">
+        <img src="./img/icon/ui/airplane.png" alt="">
+        <img src="./img/icon/calculator.png" alt="">
+        <img src="./img/icon/win/thispc.png" alt="">
+        <img src="./img/icon/win/thispc-sm.png" alt="">
+        <img src="./img/icon/win/255.png" alt="">
+        <img src="./img/icon/win/bin-em.png" alt="">
+        <img src="./img/icon/ui/audio0.png" alt="">
+        <img src="./img/icon/ui/audio1.png" alt="">
+        <img src="./img/icon/ui/audio2.png" alt="">
+        <img src="./img/icon/ui/audio3.png" alt="">
+        <img src="./img/icon/ui/close.png" alt="">
+        <img src="./img/icon/ui/minimize.png" alt="">
+        <img src="./img/icon/ui/maximize.png" alt="">
+        <img src="./img/icon/ui/maxmin.png" alt="">
+        
+    </div>
+</body>
+<script>
+    
+    window.onload=function(){
+        window.location.href='./windows/';
+    }
+</script>
+
+</html>
