@@ -1,7 +1,7 @@
 # Windows 10 网页版
 https://the1234556789.github.io/Windows10-/windows/
 ## 简介
-Windows 10 网页版是一个使用标准的网页技术，如HTML、CSS、Javascript搭建的开源的网页项目，希望能够在网页上复制Windows 10的体验
+Windows 10 网页版是一个使用标准的网页技术，如HTML、CSS、Javascript搭建的开源的网页项目，希望能够在网页上复制Windows 10的体验，但是只支持PC端，手机(Android and Apple)敬请期待~
 ## 版权声明
 本项目由陈思全原创，后面有the1234556789进行更新,你可以自由的下载、更改，也可以以任何形式发布到任何媒介中，但是必须给予适当的署名，您必须提供作者姓名和作品链接，同时标明是否对此处做了修改。您可以用任何的方式署名，但是不得以任何方式暗示许可方认可您或你的使用。</p>
 此项目绝不附属于Microsoft，且不应与Microsoft的产品相混淆，这也不是Windows 365 Cloud PC
