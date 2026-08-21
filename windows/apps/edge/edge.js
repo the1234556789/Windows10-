@@ -1,97 +1,196 @@
 (function () {
     'use strict';
+
     var f = document.getElementById('frame');
-    var input = document.querySelector('.top input');
+    var input = document.querySelector('#Input');
     var backBtn = document.querySelector('.back');
     var fwdBtn = document.querySelector('.forward');
-    var HOME = 'https://cn.bing.com/';
+    var reloadBtn = document.querySelector('.reload');
+    var homeBtn = document.querySelector('.home');
+    var menuToggle = document.querySelector('.menu');
+    var menu = document.getElementById('edgeMenu');
 
-    var hist = [{ url: HOME }];
-    var idx = 0;
+    const HOME = "https://cn.bing.com/";
+    let hist = [{ url: HOME }];
+    let idx = 0;
+    let isLoading = false;
 
-    function currentUrl() { return hist[idx] ? hist[idx].url : HOME; }
+    function currentUrl() {
+        if (!hist[idx]) return HOME;
+        return hist[idx].url;
+    }
+
+    function setLoading(state) {
+        isLoading = state;
+        if(!input) return;
+        if(state) {
+            input.placeholder = "加载中...";
+        } else {
+            input.placeholder = "输入网址或搜索";
+        }
+    }
 
     function pushUrl(url) {
+        if (!url) return;
+        // 禁止连续重复地址压历史
+        if(currentUrl() === url) return;
         hist = hist.slice(0, idx + 1);
-        hist.push({ url: url });
+        hist.push({url:url});
         idx = hist.length - 1;
         updateUi();
     }
 
     function go(url) {
-        if (!url) return;
+        if(!f) return;
+        url = String(url);
+        if(url === "about:home") url = HOME;
+
+        setLoading(true);
         f.src = url;
         pushUrl(url);
     }
 
-    function normalize(raw) {
-        var a = raw.trim();
-        if (!a) return HOME;
-        if (a.indexOf('://') === -1) {
-            if (a.indexOf('.') > 0) a = 'https://' + a;
-            else a = 'https://cn.bing.com/search?q=' + encodeURIComponent(a);
+    function normalizeUrl(raw) {
+        const text = raw.trim();
+        if(!text) return HOME;
+
+        if(text.startsWith("about:")) return text;
+
+        if (text.includes("://")) {
+            return text;
         }
-        return a;
+        // 判断是域名还是搜索词
+        if (/^[\w\-]+\.[\w\-]+/.test(text)) {
+            return "https://" + text;
+        } else {
+            return "https://cn.bing.com/search?q=" + encodeURIComponent(text);
+        }
     }
 
     function updateUi() {
-        input.value = currentUrl();
-        backBtn.classList.toggle('disabled', idx <= 0);
-        fwdBtn.classList.toggle('disabled', idx >= hist.length - 1);
+        if(input) input.value = currentUrl();
+        if(backBtn) {
+            if(idx <= 0) backBtn.classList.add("disabled");
+            else backBtn.classList.remove("disabled");
+        }
+        if(fwdBtn) {
+            if(idx >= hist.length -1) fwdBtn.classList.add("disabled");
+            else fwdBtn.classList.remove("disabled");
+        }
     }
 
-    input.onkeydown = function (e) {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-            e.preventDefault();
-            go(normalize(this.value));
-        }
-    };
-
-    document.querySelectorAll('.links a').forEach(function (a) {
-        a.onclick = function () { go(this.getAttribute('data-href')); };
-    });
-
-    backBtn.onclick = function () {
-        if (idx > 0) { idx--; f.src = currentUrl(); updateUi(); }
-    };
-
-    fwdBtn.onclick = function () {
-        if (idx < hist.length - 1) { idx++; f.src = currentUrl(); updateUi(); }
-    };
-
-    document.querySelector('.reload').onclick = function () {
-        f.src = 'about:blank';
-        setTimeout(function () { f.src = currentUrl(); }, 50);
-    };
-
-    document.querySelector('.home').onclick = function () { go(HOME); };
-
-    var menu = document.getElementById('edgeMenu');
-    document.querySelector('.menu').onclick = function (e) {
-        e.stopPropagation();
-        menu.hidden = !menu.hidden;
-    };
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.edge-menu') && !e.target.closest('.menu')) menu.hidden = true;
-    });
-    menu.querySelectorAll('.edge-menu-item').forEach(function (item) {
-        item.onclick = function () {
-            var act = this.getAttribute('data-act');
-            if (act === 'home' || act === 'homepage') go(HOME);
-            if (act === 'about') {
-                f.src = 'about:blank';
-                setTimeout(function () {
-                    f.srcdoc = '<!doctype html><meta charset="utf-8"><body style="font-family:Segoe UI,sans-serif;padding:40px;color:#333;"><h2>Microsoft Edge</h2><p>版本 120.0.0 (模拟)</p><p>此窗口为 Win10online 内嵌的 Edge 浏览器模拟。</p></body>';
-                }, 50);
+    // 地址栏回车
+    if(input) {
+        input.onkeydown = function(e) {
+            if(e.key === "Enter") {
+                e.preventDefault();
+                go(normalizeUrl(this.value));
             }
-            menu.hidden = true;
-        };
-    });
+        }
+    }
 
-    f.addEventListener('load', function () {
-        try { if (f.contentWindow && f.contentWindow.location && f.contentWindow.location.href !== 'about:blank') input.value = f.contentWindow.location.href; }
-        catch (e) { /* 跨域，忽略 */ }
-    });
+    // 快捷链接
+    document.querySelectorAll('.links a').forEach(a=>{
+        a.onclick = function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('data-href');
+            go(target);
+        }
+    })
 
+    // 后退
+    if(backBtn) {
+        backBtn.onclick = function() {
+            if(idx <= 0) return;
+            idx--;
+            if(f) f.src = currentUrl();
+            updateUi();
+        }
+    }
+
+    //前进
+    if(fwdBtn) {
+        fwdBtn.onclick = function() {
+            if(idx >= hist.length - 1) return;
+            idx++;
+            if(f) f.src = currentUrl();
+            updateUi();
+        }
+    }
+
+    //刷新
+    if(reloadBtn) {
+        reloadBtn.onclick = function() {
+            setLoading(true);
+            try {
+                if(f && f.contentWindow) {
+                    f.contentWindow.location.reload();
+                    return;
+                }
+            } catch(err) {
+                //跨域兜底
+                f.src = "about:blank";
+                setTimeout(()=>{
+                    f.src = currentUrl();
+                }, 80);
+            }
+        }
+    }
+
+    //主页
+    if(homeBtn) {
+        homeBtn.onclick = ()=> go(HOME);
+    }
+
+    //右上角菜单
+    if(menuToggle && menu) {
+        menuToggle.onclick = function(e) {
+            e.stopPropagation();
+            menu.hidden = !menu.hidden;
+        }
+        document.addEventListener('click', function(e) {
+            if(!e.target.closest('.menu') && !e.target.closest('#edgeMenu')) {
+                menu.hidden = true;
+            }
+        })
+
+        menu.querySelectorAll('.edge-menu-item').forEach(item=>{
+            item.onclick = function() {
+                const act = this.dataset.act;
+                if(act === "home") go(HOME);
+                if(act === "about") {
+                    f.src = "about:blank";
+                    setTimeout(()=>{
+                        f.srcdoc = `
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body style="font-family:'Segoe UI',Microsoft YaHei;padding:32px;">
+<h2>Microsoft Edge (模拟)</h2>
+<p>版本：124.0 模拟版</p>
+<p>项目 Win10‑Online 网页模拟器</p>
+</body>
+`;
+                    }, 50);
+                }
+                menu.hidden = true;
+            }
+        })
+    }
+
+    //iframe加载完成
+    if(f) {
+        f.addEventListener('load', function() {
+            setLoading(false);
+            try {
+                const realHref = f.contentWindow.location.href;
+                // 跨域页面会抛出异常，直接捕获忽略
+                if(realHref !== "about:blank") {
+                    if(input) input.value = realHref;
+                }
+            } catch(e) {}
+        })
+    }
+
+    //初始化界面
     updateUi();
 })();
