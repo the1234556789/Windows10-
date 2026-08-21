@@ -8,14 +8,15 @@ Windows 10 网页版是一个使用标准的网页技术，如HTML、CSS、Javas
 本项目中Microsoft、Windows和其它示范产品是Microsoft公司的商标。
 ## 其它
 如果你对该项目感兴趣可以到<a target="_blank" href="[[https://github.com/siquan001/Win10online](https://github.com/the1234556789/Windows10-)](https://github.com/the1234556789/Windows10-)">Github</a>提issue，或联系我的邮箱：3876175047@qq.com
-## 当前版本:1.2.5
+## 当前版本:1.3.0
+修复了部分bug,提高了稳定性。
+## 1.2.5
 修复了所有bug
-
 
 以及修复计算器
 
-
 但删除了手机端使用,只支持PC端,未来可能再次开发使用,敬请期待~
+
 还有Edge应用部分bug
 ### 0.7.6
 添加右键菜单
