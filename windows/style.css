@@ -4,8 +4,6 @@
 body{
     height: 100vh;
     overflow: hidden;
-    /* 页面一加载立刻生效，登录界面渲染前就启用自定义鼠标 */
-    cursor: url(Cursor.png),default;
 }
 #app{
     width: 100%;
@@ -20,12 +18,4 @@ body{
     opacity: 0;
     z-index: 9999;
     pointer-events: none;
-}
-/* 上下拉伸调整光标 */
-.resize-vertical{
-    cursor: url("Sizing Cursor.png"),ns-resize;
-}
-/* 加载等待转圈光标 */
-.wait-cursor{
-    cursor: url(aero_busy.png),wait;
 }
