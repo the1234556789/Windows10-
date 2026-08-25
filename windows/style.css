@@ -4,6 +4,7 @@
 body{
     height: 100vh;
     overflow: hidden;
+    /* 页面一加载立刻生效，登录界面渲染前就启用自定义鼠标 */
     cursor: url(Cursor.png),default;
 }
 #app{
