@@ -4,7 +4,6 @@
 body{
     height: 100vh;
     overflow: hidden;
-    /* 默认箭头光标 Cursor.png */
     cursor: url(Cursor.png),default;
 }
 #app{
@@ -21,11 +20,11 @@ body{
     z-index: 9999;
     pointer-events: none;
 }
-/* 上下拉伸调整光标：Sizing Cursor.png */
+/* 上下拉伸调整光标 */
 .resize-vertical{
     cursor: url("Sizing Cursor.png"),ns-resize;
 }
-/* 加载等待转圈光标：aero_busy.png */
+/* 加载等待转圈光标 */
 .wait-cursor{
     cursor: url(aero_busy.png),wait;
 }
