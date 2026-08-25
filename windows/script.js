@@ -1,1 +1,1 @@
-document.getElementById("app").src='pages/poweron.html';
+document.getElementById("app").src='windows/index.html';
