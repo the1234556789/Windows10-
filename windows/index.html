@@ -5,11 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows 10 online</title>
+    <!-- CSS最先加载！！！在脚本、登录界面渲染之前执行，实现登录出现前就有鼠标 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <iframe frameborder="0" id="app"></iframe>
     <div class="pad-light"></div>
 </body>
+<!-- 脚本后加载：登录界面、业务逻辑在css之后运行 -->
 <script src="script.js"></script>
 </html>
